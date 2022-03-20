@@ -1,0 +1,86 @@
+--- udlfb_orig.c	2022-03-20 17:18:29.915210700 -0500
++++ udlfb_backported.c	2022-03-20 17:07:13.305216000 -0500
+@@ -15,9 +15,13 @@
+  * Device-specific portions based on information from Displaylink, with work
+  * from Florian Echtler, Henrik Bjerregaard Pedersen, and others.
+  */
++/* This is the Linux 2.6.38 udlfb driver, backported to Linux 2.6.30.
++ * Original file can be found here: https://github.com/torvalds/linux/blob/521cb40b0c44418a4fd36dc633f575813d59a43d/drivers/video/udlfb.c
++*/
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
++#define pr_warn pr_warning /* Needed for kernel 2.6.30 as pr_warn is not defined in linux/kernel.h */
++#define FBINFO_VIRTFB		0x0004 /* FB is System RAM, not device. Needed as not in fb.h for 2.6.30 */
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+@@ -1128,7 +1132,13 @@
+ 		 * But with imperfect damage info we may send pixels over USB
+ 		 * that were, in fact, unchanged - wasting limited USB bandwidth
+ 		 */
+-		new_back = vzalloc(new_len);
++		/* vzalloc() does not exist on 2.6.30
++		See: https://github.com/torvalds/linux/commit/408af87a397a8ddef56ad39a79481f592aa1ac1a 
++		Using vmalloc() and memset() instead*/
++		/* new_back = vzalloc(new_len); */
++		new_back = vmalloc(new_len);
++		if (new_back)
++			memset(new_back, 0, new_len);
+ 		if (!new_back)
+ 			pr_info("No shadow/backing buffer allocated\n");
+ 		else {
+@@ -1394,8 +1404,8 @@
+ 	.attr.name = "edid",
+ 	.attr.mode = 0666,
+ 	.size = EDID_LENGTH,
+-	.read = edid_show,
+-	.write = edid_store
++	.read = (void *)edid_show, /* Ugly fix for warning of incompatible pointer type */
++	.write = (void *)edid_store
+ };
+ 
+ static struct device_attribute fb_device_attrs[] = {
+@@ -1500,6 +1510,7 @@
+ 	struct fb_info *info = 0;
+ 	int retval = -ENOMEM;
+ 	int i;
++	int extra_err;
+ 
+ 	/* usb initialization */
+ 
+@@ -1587,9 +1598,9 @@
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(fb_device_attrs); i++)
+-		device_create_file(info->dev, &fb_device_attrs[i]);
+-
+-	device_create_bin_file(info->dev, &edid_attr);
++		extra_err = device_create_file(info->dev, &fb_device_attrs[i]);
++	/* extra_err is fix for unused value of function warning */
++	extra_err = device_create_bin_file(info->dev, &edid_attr);
+ 
+ 	pr_info("DisplayLink USB device /dev/fb%d attached. %dx%d resolution."
+ 			" Using %dK framebuffer memory\n", info->node,
+@@ -1752,7 +1763,11 @@
+ 		urb = unode->urb;
+ 
+ 		/* Free each separately allocated piece */
+-		usb_free_coherent(urb->dev, dev->urbs.size,
++		/* Make sure this is the usb_buffer_free and not
++		usb_free_coherent as that won't work on Linux 2.6.30
++		See: https://github.com/torvalds/linux/commit/c220cc3e37f1596260870f99f751102f667384a5
++		This is just a simple function rename as the linked commit message says */
++		usb_buffer_free(urb->dev, dev->urbs.size,
+ 				  urb->transfer_buffer, urb->transfer_dma);
+ 		usb_free_urb(urb);
+ 		kfree(node);
+@@ -1788,7 +1803,7 @@
+ 		}
+ 		unode->urb = urb;
+ 
+-		buf = usb_alloc_coherent(dev->udev, MAX_TRANSFER, GFP_KERNEL,
++		buf = usb_buffer_alloc(dev->udev, MAX_TRANSFER, GFP_KERNEL,
+ 					 &urb->transfer_dma);
+ 		if (!buf) {
+ 			kfree(unode);
