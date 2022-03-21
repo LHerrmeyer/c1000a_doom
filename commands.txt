@@ -2,6 +2,6 @@
 git diff fccca HEAD -M90 --diff-filter=d -- ':!.gitignore' > mar20.patch
 # Generate depmod
 mkdir -p ./lib/modules/$(uname -r)
-cp *.ko ./lib/modules/$(uname -r)
+cp modules/*.ko ./lib/modules/$(uname -r)
 depmod -n -w -e -v -F ./System.map -b . 2>&1 | tee depmod.txt
 # Compile everything
