@@ -3022,10 +3022,10 @@ index 3273791c..620f005e 100644
 +CONFIG_HAS_DMA=y
 +CONFIG_NLATTR=y
 diff --git a/.gitignore b/.gitignore
-index f7c57b4c..f553df16 100644
+index f7c57b4c..8dd07191 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -45,12 +45,25 @@ modules.builtin
+@@ -45,12 +45,24 @@ modules.builtin
  /Module.markers
  /Module.symvers
  
@@ -3037,7 +3037,6 @@ index f7c57b4c..f553df16 100644
 +gen_crc32table
 +timeconst.h
 +vmlinux.lds
-+arch/mips/kernel/vmlinux.lds
 +
  #
  # git files that we don't want to ignore even it they are dot-files
@@ -3051,6 +3050,19 @@ index f7c57b4c..f553df16 100644
  #
  # Generated include files
  #
+diff --git a/arch/mips/kernel/vmlinux.lds b/arch/mips/kernel/vmlinux.lds
+index fd7d659f..429e358d 100644
+--- a/arch/mips/kernel/vmlinux.lds
++++ b/arch/mips/kernel/vmlinux.lds
+@@ -1,7 +1,7 @@
+ /*
+  * Automatically generated C config: don't edit
+  * Linux kernel version: 2.6.30
+- * Sun Mar 20 14:09:10 2022
++ * Sun Mar 20 15:32:07 2022
+  */
+ /*
+  * DO NOT MODIFY.
 diff --git a/drivers/video/Kconfig b/drivers/video/Kconfig
 index 0048f118..bbb44bd2 100755
 --- a/drivers/video/Kconfig
