@@ -1,0 +1,64 @@
+depmod: WARNING: could not open /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/modules.order: No such file or directory
+/media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/udlfb.ko needs "unregister_framebuffer": /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/fb_bak.ko
+/media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/udlfb.ko needs "fb_sys_write": /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/fb_sys_fops.ko
+/media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/udlfb.ko needs "sys_imageblit": /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/sysimgblt.ko
+/media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/udlfb.ko needs "sys_fillrect": /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/sysfillrect.ko
+depmod: WARNING: /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/udlfb.ko needs unknown symbol vesa_modes
+/media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/udlfb.ko needs "sys_copyarea": /media/sf_LubuntuShare/./lib/modules/5.4.0-42-generic/syscopyarea.ko
+sysfillrect.ko:
+fb_bak.ko:
+syscopyarea.ko:
+sysimgblt.ko:
+fb_sys_fops.ko:
+udlfb.ko: syscopyarea.ko sysfillrect.ko sysimgblt.ko fb_sys_fops.ko fb_bak.ko
+# Aliases extracted from modules themselves.
+alias usb:v17E9p*d*dc*dsc*dp*ic*isc*ip* udlfb
+# Soft dependencies extracted from modules themselves.
+# Aliases for symbols, used by symbol_request().
+alias symbol:fb_find_mode fb_bak
+alias symbol:fb_pad_aligned_buffer fb_bak
+alias symbol:fb_add_videomode fb_bak
+alias symbol:sys_copyarea syscopyarea
+alias symbol:lock_fb_info fb_bak
+alias symbol:fb_alloc_cmap fb_bak
+alias symbol:fb_var_to_videomode fb_bak
+alias symbol:fb_set_suspend fb_bak
+alias symbol:fb_get_options fb_bak
+alias symbol:fb_copy_cmap fb_bak
+alias symbol:fb_set_cmap fb_bak
+alias symbol:fb_validate_mode fb_bak
+alias symbol:fb_blank fb_bak
+alias symbol:fb_find_best_mode fb_bak
+alias symbol:register_framebuffer fb_bak
+alias symbol:fb_default_cmap fb_bak
+alias symbol:fb_get_color_depth fb_bak
+alias symbol:fb_firmware_edid fb_bak
+alias symbol:fb_class fb_bak
+alias symbol:fb_sys_read fb_sys_fops
+alias symbol:fb_find_best_display fb_bak
+alias symbol:fb_dealloc_cmap fb_bak
+alias symbol:fb_pad_unaligned_buffer fb_bak
+alias symbol:fb_videomode_to_modelist fb_bak
+alias symbol:sys_fillrect sysfillrect
+alias symbol:framebuffer_release fb_bak
+alias symbol:fb_mode_is_equal fb_bak
+alias symbol:fb_invert_cmaps fb_bak
+alias symbol:fb_set_var fb_bak
+alias symbol:fb_get_buffer_offset fb_bak
+alias symbol:num_registered_fb fb_bak
+alias symbol:unregister_framebuffer fb_bak
+alias symbol:sys_imageblit sysimgblt
+alias symbol:fb_find_nearest_mode fb_bak
+alias symbol:fb_parse_edid fb_bak
+alias symbol:framebuffer_alloc fb_bak
+alias symbol:fb_destroy_modedb fb_bak
+alias symbol:fb_get_mode fb_bak
+alias symbol:fb_destroy_modelist fb_bak
+alias symbol:fb_edid_to_monspecs fb_bak
+alias symbol:registered_fb fb_bak
+alias symbol:fb_sys_write fb_sys_fops
+alias symbol:fb_match_mode fb_bak
+alias symbol:fb_pan_display fb_bak
+alias symbol:fb_mode_option fb_bak
+alias symbol:fb_show_logo fb_bak
+alias symbol:fb_videomode_to_var fb_bak
